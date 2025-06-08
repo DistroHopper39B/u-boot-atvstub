@@ -20,7 +20,7 @@ noreturn void atvlib_init(mach_boot_args_t *ba)
 
     // Enable verbose output.
     // This is triggered by adding "-v" or "-x" to the "Kernel Flags" key in com.apple.Boot.plist
-    // or holding Command-V or Command-
+    // or holding Command-V or Command-S on the keyboard.
     verbose_enable = (ba->video.display_mode == DISPLAY_MODE_TEXT);
     if (verbose_enable)
         cons_clear_screen(COLOR_BLACK);
