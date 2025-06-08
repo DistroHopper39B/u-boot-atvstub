@@ -30,7 +30,7 @@ LDFLAGS := 	-static \
 
 CFLAGS := -Wall -Werror -nostdlib -fno-stack-protector -fno-builtin -O0 -std=gnu11 --target=$(TARGET) -Iinclude
 
-OBJS := start.o atvlib.o baselibc_string.o cons.o tinyprintf.o
+OBJS := start.o atvlib.o baselibc_string.o cons.o tinyprintf.o debug.o
 
 %.o: %.S
 	$(CC) $(CFLAGS) -c $< -o $@

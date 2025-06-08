@@ -26,7 +26,7 @@ void video_print_char(char c, uint32_t x, uint32_t y, uint32_t fg_color, uint32_
         for (uint8_t column = 0; column < ISO_CHAR_WIDTH; column++)
         {
             uint8_t mask = char_line >> column;
-            pixel[column] = (((mask & 1) == 1) ? fg_color : bg_color);
+            pixel[column] = ((mask & 1) ? fg_color : bg_color);
         }
         char_position++;
         pixel = (uint32_t *) ((char *) pixel + fb.pitch);
@@ -113,12 +113,21 @@ boolean_t cons_clear_screen(uint32_t color)
     return true;
 }
 
-boolean_t cons_change_colors(uint32_t fg_color, uint32_t bg_color)
+boolean_t cons_change_fg_color(uint32_t fg_color)
 {
     if (!fb.enabled)
         return false;
 
     con.fg_color        = RGBA_TO_NATIVE(fb, fg_color);
+
+    return true;
+}
+
+boolean_t cons_change_bg_color(uint32_t bg_color)
+{
+    if (!fb.enabled)
+        return false;
+
     con.bg_color        = RGBA_TO_NATIVE(fb, bg_color);
 
     return true;
