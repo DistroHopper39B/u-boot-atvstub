@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2025 Sylas Hollander.
- * Copyright (C) 2020-2025 Jiaxun Yang.
  * PURPOSE: ATVLib main header file.
  * SPDX-License-Identifier: MIT
  */
