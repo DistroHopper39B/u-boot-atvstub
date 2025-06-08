@@ -15,14 +15,15 @@ noreturn void atvlib_init(mach_boot_args_t *ba)
     gBA = ba;
 
     // Initialize console.
-    cons_init(&ba->video, COLOR_WHITE, COLOR_BLACK);
+    if (!cons_init(&ba->video, COLOR_WHITE, COLOR_BLACK))
+        halt();
 
     // Enable verbose output.
     verbose_enable = (ba->video.display_mode == DISPLAY_MODE_TEXT);
     if (verbose_enable)
         cons_clear_screen(COLOR_BLACK);
 
-    printf("Hello World!\n");
+    printf("Hello, world!\n");
 
     halt();
 }

@@ -26,7 +26,7 @@ void video_print_char(char c, uint32_t x, uint32_t y, uint32_t fg_color, uint32_
         for (uint8_t column = 0; column < ISO_CHAR_WIDTH; column++)
         {
             uint8_t mask = char_line >> column;
-            pixel[column] = (((mask & 1) == 1) ? RGBA_TO_NATIVE(fb, fg_color) : RGBA_TO_NATIVE(fb, bg_color));
+            pixel[column] = (((mask & 1) == 1) ? fg_color : bg_color);
         }
         char_position++;
         pixel = (uint32_t *) ((char *) pixel + fb.pitch);
@@ -72,38 +72,56 @@ void cons_print_char(void *p, char c)
         {
             con.cursor_x = 0;
             con.cursor_y++;
+            break;
         }
         // CASE 2: backspace.
         case '\b':
         {
             con.cursor_x--;
             video_print_char(c, con.cursor_x, con.cursor_y, con.fg_color, con.bg_color);
+            break;
         }
         // CASE 3: any other character.
         default:
         {
             video_print_char(c, con.cursor_x, con.cursor_y, con.fg_color, con.bg_color);
             con.cursor_x++;
+            break;
         }
     }
 }
 
-void cons_clear_screen(uint32_t color)
+boolean_t cons_clear_screen(uint32_t color)
 {
     if (!fb.enabled)
-        return;
+        return false;
+
+    uint32_t    native_color = RGBA_TO_NATIVE(fb, color);
 
     for (uint32_t line = 0; line < fb.height; line++)
     {
         uint32_t *screen = (uint32_t *) ((char *) fb.base + line * fb.pitch);
         for (uint32_t column = 0; column < fb.width; column++)
         {
-            *screen++ = RGBA_TO_NATIVE(fb, color);
+            *screen++ = native_color;
         }
     }
 
     con.cursor_x = 0;
     con.cursor_y = 0;
+
+    return true;
+}
+
+boolean_t cons_change_colors(uint32_t fg_color, uint32_t bg_color)
+{
+    if (!fb.enabled)
+        return false;
+
+    con.fg_color        = RGBA_TO_NATIVE(fb, fg_color);
+    con.bg_color        = RGBA_TO_NATIVE(fb, bg_color);
+
+    return true;
 }
 
 // Platform specific video initialization code.
@@ -146,8 +164,8 @@ boolean_t cons_init(void *video_params, uint32_t fg_color, uint32_t bg_color)
     con.width           = fb.width / ISO_CHAR_WIDTH;
     con.height          = fb.height / ISO_CHAR_HEIGHT;
     con.size            = con.width * con.height;
-    con.fg_color        = fg_color;
-    con.bg_color        = bg_color;
+    con.fg_color        = RGBA_TO_NATIVE(fb, fg_color);
+    con.bg_color        = RGBA_TO_NATIVE(fb, bg_color);
 
     // initialize printf function
     init_printf(print_buf, cons_print_char);

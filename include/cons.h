@@ -57,4 +57,5 @@ typedef struct _console_priv_t
 
 /* Functions */
 extern boolean_t cons_init(void *video_params, uint32_t fg_color, uint32_t bg_color);
-extern void cons_clear_screen(uint32_t color);
+extern boolean_t cons_clear_screen(uint32_t color);
+extern boolean_t cons_change_colors(uint32_t fg_color, uint32_t bg_color);
