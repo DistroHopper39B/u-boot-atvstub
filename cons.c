@@ -156,7 +156,7 @@ boolean_t cons_init(void *video_params, uint32_t fg_color, uint32_t bg_color)
     fb.width            = mv->width;
     fb.height           = mv->height;
     fb.depth            = 32;
-    fb.pixels_per_row   = (mv->pitch * 4);
+    fb.pixels_per_row   = (mv->pitch / 4);
 
     fb.red_size         = 8;
     fb.red_shift        = 16;

@@ -9,6 +9,8 @@
 mach_boot_args_t    *gBA;
 boolean_t           verbose;
 
+extern noreturn void load_uboot(void);
+
 // C entry point for Apple TV code
 noreturn void atvlib_init(mach_boot_args_t *ba)
 {
@@ -25,8 +27,5 @@ noreturn void atvlib_init(mach_boot_args_t *ba)
     if (verbose)
         cons_clear_screen(COLOR_BLACK);
 
-    trace("Hello, world!\n");
-
-    fail(__FILE__, __LINE__, "Test");
-    halt();
+    load_uboot();
 }
